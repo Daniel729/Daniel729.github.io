@@ -1,0 +1,25 @@
+h2 {
+  text-align: center;
+}
+
+table {
+  border: 4px solid green;
+  border-color: green;
+  border-spacing: 0px;
+}
+
+.tile {
+  width: 60px;
+  height: 60px;
+  font-size: 35px;
+  color: white;
+  text-align: center;
+}
+
+.empty {
+  width: 60px;
+  height: 60px;
+  font-size: 32px;
+  text-align: center;
+  background-color: white !important;
+}
