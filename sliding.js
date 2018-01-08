@@ -1,8 +1,9 @@
 /*jshint esversion: 6 */
-//create game
 let size = 4;
+
 function create() {
   size = prompt("Size: ", 4);
+  if (size >= 15) {alert("Please use a number smaller than 15"); create();}
   createGame(size);
 }
 
@@ -20,35 +21,40 @@ function createGame(size) {
   get(size - 1, size - 1).innerHTML = "";
 }
 
-function randomize() {
-  let i = 0;
-  function rand() {
-    setTimeout(function () {
-      let q = Math.floor(Math.random() * 4);
-      let empty = document.getElementsByClassName("empty")[0];
-      let rect = empty.getBoundingClientRect();
-      let center = [rect.top+30, rect.left+30];
-
-      if (q == 0) {click(center[0]-60, center[1]);}
-      else if (q == 1) {click(center[0]+60, center[1]);}
-      else if (q == 2) {click(center[0], center[1]-60);}
-      else if (q == 3) {click(center[0], center[1]+60);}
-
-      i++;
-      if (i < 750) {rand();}
-    }, 1);
+function randomize(size) {
+  size = prompt("Size: ", 4);
+  if (size >= 15) {alert("Please use a number smaller than 15"); randomize();}
+  let numbers = [];
+  for (i = 1; i <= size*size; i++) {numbers.push([i, 255 - Math.floor(200/size/size*i)]);}
+  let colorx;
+  let t = 0;
+  document.getElementById("game").innerHTML = "<table id='table'></table>";
+  for (let y = 0; y < size; y++) {
+    let trY = "tr" + y;
+    document.getElementById("table").innerHTML += `<tr id=${trY}></tr>`;
+    for (let x = 0; x < size; x++) {
+      let number = Math.floor(Math.random()*(size*size - t));
+      if (numbers[number][0] == size*size) {
+        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y})">${numbers[number][0]}</td>`;
+        set(x, y, "empty");
+        get(x, y).innerHTML = "";
+      } else {
+        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y})">${numbers[number][0]}</td>`;
+        numbers.splice(number, 1);
+      }
+      t++;
+    }
   }
-  rand();
 }
 
 function moveTile(x, y) {
-  if (x == 0 && y == 0) {
+  if (x === 0 && y === 0) {
     if (getType(x+1, y) == "empty") {
       moveRight(x, y);
     } else if (getType(x, y+1) == "empty") {
       moveDown(x, y);
     }
-  } else if (x == size - 1 && y == 0) {
+  } else if (x == size - 1 && y === 0) {
     if (getType(x-1, y) == "empty") {
       moveLeft(x, y);
     } else if (getType(x, y+1) == "empty") {
@@ -60,13 +66,13 @@ function moveTile(x, y) {
     } else if (getType(x, y-1) == "empty") {
       moveUp(x, y);
     }
-  } else if (x == 0 && y == size - 1) {
+  } else if (x === 0 && y == size - 1) {
     if (getType(x+1, y) == "empty") {
       moveRight(x, y);
     } else if (getType(x, y-1) == "empty") {
       moveUp(x, y);
     }
-  } else if (y == 0) {
+  } else if (y === 0) {
     if (getType(x+1, y) == "empty") {
       moveRight(x, y);
     } else if (getType(x-1, y) == "empty") {
@@ -90,7 +96,7 @@ function moveTile(x, y) {
     } else if (getType(x, y-1) == "empty") {
       moveUp(x, y);
     }
-  } else if (x == 0) {
+  } else if (x === 0) {
     if (getType(x, y+1) == "empty") {
       moveDown(x, y);
     } else if (getType(x, y-1) == "empty") {
@@ -112,6 +118,16 @@ function moveTile(x, y) {
 }
 
 //miscellaneous
+function ranUp(x, y) {
+  let newTile = get(x, y);
+  let Tile = get(x, y-1);
+  let number = tile.innerHTML;
+  newTile.style.backgroundColor = getStyle(x, y-1, "background-color");
+  newTile.innerHTML = number;
+  tile.innerHTML = "";
+  set(x, y-1, "empty");
+  set(x, y, "tile");
+}
 function moveUp (x, y) {
   let tile = get(x, y);
   let newTile = get(x, y-1);
@@ -175,10 +191,6 @@ function getStyle2(value) {
   return $("#body").css(value);
 }
 
-function get2(x) {
-  return document.getElementById(x);
-}
-
 function whiteBlack() {
   if (getStyle2('background-color') == "rgb(255, 255, 255)") {
     document.getElementById('body').style.backgroundColor = 'black';
@@ -187,18 +199,6 @@ function whiteBlack() {
   }
 }
 
-function click(x,y){
-    var ev = document.createEvent("MouseEvent");
-    var el = document.elementFromPoint(x,y);
-    ev.initMouseEvent(
-        "click",
-        true /* bubble */, true /* cancelable */,
-        window, null,
-        x, y, 0, 0, /* coordinates */
-        false, false, false, false, /* modifier keys */
-        0 /*left*/, null
-    );
-    el.dispatchEvent(ev);
-}
-
-window.onload = createGame(4);
+window.onload = function() {
+  createGame(4);
+};
