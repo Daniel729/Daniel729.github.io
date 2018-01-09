@@ -7,6 +7,12 @@ function create() {
   createGame(size);
 }
 
+function random() {
+  size = prompt("Size: ", 4);
+  if (size >= 15) {alert("Please use a number smaller than 15"); create();}
+  randomize(size);
+}
+
 function createGame(size) {
   document.getElementById("game").innerHTML = "<table id='table'></table>";
   for (let y = 0; y < size; y++) {
@@ -22,8 +28,6 @@ function createGame(size) {
 }
 
 function randomize(size) {
-  size = prompt("Size: ", 4);
-  if (size >= 15) {alert("Please use a number smaller than 15"); randomize();}
   let numbers = [];
   for (i = 1; i <= size*size; i++) {numbers.push([i, 255 - Math.floor(200/size/size*i)]);}
   let colorx;
