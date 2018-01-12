@@ -1,15 +1,20 @@
 /*jshint esversion: 6 */
 let size = 4;
+let isLimitEnabled = true;
 
 function create() {
   size = prompt("Size: ", 4);
-  if (size >= 15) {alert("Please use a number smaller than 15"); create();}
+  if (isLimitEnabled) {
+    if (size >= 15) {alert("Please use a number smaller than 15"); create();}
+  }
   createGame(size);
 }
 
 function random() {
   size = prompt("Size: ", 4);
-  if (size >= 15) {alert("Please use a number smaller than 15"); create();}
+  if (isLimitEnabled) {
+    if (size >= 15) {alert("Please use a number smaller than 15"); create();}
+  }
   randomize(size);
 }
 
@@ -20,7 +25,7 @@ function createGame(size) {
     document.getElementById("table").innerHTML += `<tr id=${trY}></tr>`;
     for (let x = 0; x < size; x++) {
       let color = 255 - Math.floor(200/size/size)*(y*size + x + 1);
-      document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${color}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y})">${y*size + x + 1}</td>`;
+      document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${color}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y}); checkWin();">${y*size + x + 1}</td>`;
     }
   }
   set(size - 1, size - 1, "empty");
@@ -39,11 +44,11 @@ function randomize(size) {
     for (let x = 0; x < size; x++) {
       let number = Math.floor(Math.random()*(size*size - t));
       if (numbers[number][0] == size*size) {
-        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y})">${numbers[number][0]}</td>`;
+        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y}); checkWin();">${numbers[number][0]}</td>`;
         set(x, y, "empty");
         get(x, y).innerHTML = "";
       } else {
-        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y})">${numbers[number][0]}</td>`;
+        document.getElementById(`${trY}`).innerHTML += `<td class="tile" style="background-color: rgb(${numbers[number][1]}, 00, 00); user-select: none;" id="${x}-${y}" onclick="moveTile(${x}, ${y}); checkWin();">${numbers[number][0]}</td>`;
         numbers.splice(number, 1);
       }
       t++;
@@ -51,6 +56,23 @@ function randomize(size) {
   }
 }
 
+function checkWin() {
+  let won = true;
+  for (x=0; x<size; x++) {
+    for (y=0; y<size; y++) {
+      if (x==size-1 && y==size-1) {
+        if (get(x, y).innerHTML!="") {
+          won = false;
+        }
+      } else if (get(x, y).innerHTML != y*size + x + 1) {
+        won = false;
+      }
+    }
+  }
+  if (won) {
+    alert("Congratulations, you won!");
+  }
+}
 function moveTile(x, y) {
   if (x === 0 && y === 0) {
     if (getType(x+1, y) == "empty") {
@@ -201,6 +223,10 @@ function whiteBlack() {
   } else {
     document.getElementById('body').style.backgroundColor = 'white';
   }
+}
+
+function disableLimit() {
+  isLimitEnabled = false;
 }
 
 window.onload = function() {
