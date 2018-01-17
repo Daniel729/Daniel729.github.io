@@ -6,14 +6,15 @@ window.onload = function() {
 function medie() {
   let note = get("note").value.split(" ");
   if (note == null) get("medie").innerHTML = "EROARE";
-  let teza = get("teza").value;
+  let teza = parseInt(get("teza").value);
+  if (teza > 10 || teza < 1) {get("medie").innerHTML = "Teza este prea mare sau prea mica"; return;}
   let medie1 = 0;
   for (let i=0; i<note.length; i++) {
-    if (note[i] > 10) {get("medie").innerHTML = "Numere prea mari!!";}
+    if (note[i] > 10 || note[i] < 1) {get("medie").innerHTML = `A ${i+1} nota este prea mare sau prea mica`; return;}
     medie1+=parseInt(note[i]);
   }
   medie1 = medie1/note.length;
-  if (teza != "") {
+  if (!isNaN(teza)) {
     let medie = (medie1*3 + teza)/4;
     if (isNaN(medie)) {get("medie").innerHTML = "EROARE";}
     else {
