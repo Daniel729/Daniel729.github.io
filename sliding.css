@@ -13,6 +13,7 @@ table {
   border: 4px solid green;
   border-color: green;
   border-spacing: 0px;
+  background-color: white;
   margin-left:auto;
   margin-right:auto;
 }
@@ -28,7 +29,21 @@ table {
 .empty {
   width: 60px;
   height: 60px;
-  font-size: 32px;
+  font-size: 35px;
+  color: white;
   text-align: center;
-  background-color: white !important;
+  transition:all 0s;
+  }
+
+.moveUp {
+  transform: translateY(-100%);
+}
+.moveDown {
+  transform: translateY(100%);
+}
+.moveLeft {
+  transform: translateX(-100%);
+}
+.moveRight {
+  transform: translateX(100%);
 }
