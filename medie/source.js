@@ -3,11 +3,12 @@ window.onload = function() {
   get("body").style.height = window.innerHeight;
   get("body").style.width = window.innerWidth;
 };
+
 function medie() {
   let note = get("note").value.split(" ");
-  if (note == null) get("medie").innerHTML = "EROARE";
   let teza = parseInt(get("teza").value);
-  if (teza > 10 || teza < 1) {get("medie").innerHTML = "Teza este prea mare sau prea mica"; return;}
+  if (note == null) get("medie").innerHTML = "EROARE";
+  if (teza >  10 || teza < 1) {get("medie").innerHTML = "Teza este prea mare sau prea mica"; return;}
   let medie1 = 0;
   for (let i=0; i<note.length; i++) {
     if (note[i] > 10 || note[i] < 1) {get("medie").innerHTML = `A ${i+1} nota este prea mare sau prea mica`; return;}
