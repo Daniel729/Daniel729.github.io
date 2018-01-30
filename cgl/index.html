@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Conway's game of life</title>
+</head>
+<body id="body" style="background-color: white;" onload="newGame()">
+  <canvas id="canvas" width='640' height='640'style="border:1px solid black; margin-left: auto; margin-right: auto;"></canvas></br>
+  <button type="button" onclick="updateCanvas()">Update</button><br>
+  <button id="startStop" type="button" onclick="startStop()">Start</button>
+  <div id="board"></div>
+  <script src="source.js"></script>
+</body>
+</html>
