@@ -16,22 +16,49 @@ function newGame() {
     }
   }
 
-  cv.addEventListener('mousedown', e => {
-    const x = Math.floor(e.clientX/cellSize)-1;
-    const y = Math.floor(e.clientY/cellSize)-1;
-    if (!board[y][x]) {
+  cv.addEventListener('touchstart', e => {
+    const x = Math.floor(e.touches[0].clientX/cellSize)-1;
+    const y = Math.floor(e.touches[0].clientY/cellSize)-1;
+    if (board[y][x] === 0) {
       mouseclick = 1;
     } else if (board[y][x] == 1) {
       mouseclick = 0;
     }
-    console.log(x + " " + y);
+  });
+
+  cv.addEventListener('touchend', e => {
+    mouseclick = null;
+  });
+
+  cv.addEventListener('touchmove', e => {
+    if (mouseclick === null) return;
+    const x = Math.floor(e.touches[0].clientX/cellSize)-1;
+    const y = Math.floor(e.touches[0].clientY/cellSize)-1;
+    if (mouseclick) {
+      board[y][x] = 1;
+      ctx.fillStyle = 'black';
+    } else if (!mouseclick) {
+      board[y][x] = 0;
+      ctx.fillStyle = 'white';
+    }
+    ctx.fillRect(x*cellSize, y*cellSize, cellSize, cellSize);
+  });
+
+  cv.addEventListener('mousedown', e => {
+    const x = Math.floor(e.clientX/cellSize)-1;
+    const y = Math.floor(e.clientY/cellSize)-1;
+    if (board[y][x] === 0) {
+      mouseclick = 1;
+    } else if (board[y][x] == 1) {
+      mouseclick = 0;
+    }
   });
 
   cv.addEventListener('mouseup', e => {
     mouseclick = null;
   });
 
-  cv.onmousemove = e => {
+  cv.addEventListener('mousemove', e => {
     if (mouseclick === null) return;
     const x = Math.floor(e.clientX/cellSize)-1;
     const y = Math.floor(e.clientY/cellSize)-1;
@@ -43,9 +70,9 @@ function newGame() {
       ctx.fillStyle = 'white';
     }
     ctx.fillRect(x*cellSize, y*cellSize, cellSize, cellSize);
-  };
+  });
 
-  window.addEventListener('keypress', e => {
+  cv.addEventListener('keypress', e => {
     if (e.keyCode == 32) {
       startStop();
     }
@@ -97,6 +124,7 @@ function howMany(y, x, b) {
              b[x-1][y+1],
              b[x+1][y-1],
              b[x+1][y+1]];
+
   for (let i=0; i<pos.length; i++) {
     if (pos[i]) {
       num++;
